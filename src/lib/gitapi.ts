@@ -24,7 +24,14 @@ export class GitApi {
             headers: {
                 'Authorization': `token ${token}`,
             },
+        }).catch(e => {
+            console.log('Cannot get user: ' + e);
+            return e.response;
         });
+
+        if (response.status !== 200) {
+            throw new Error('Cannot get user')
+        }
 
         return response.data;
     }

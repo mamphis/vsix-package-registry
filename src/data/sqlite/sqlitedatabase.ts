@@ -1,10 +1,14 @@
 import { createConnection } from "typeorm";
 import { User } from "../../model/user";
+import { Vsix } from "../../model/vsix";
+import { VsixVersion } from "../../model/vsixversion";
 import { BasicDAO } from "../basicdao";
-import { Database, UserDAO } from "../database";
+import { Database, UserDAO, VsixDAO, VsixVersionDAO } from "../database";
 
 export class SqliteDatabase implements Database {
     user: UserDAO = new BasicDAO(User);
+    vsix: VsixDAO = new BasicDAO(Vsix);
+    vsixVersion: VsixVersionDAO = new BasicDAO(VsixVersion);
 
     constructor(private dataPath: string) {
 

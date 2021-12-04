@@ -14,9 +14,6 @@ export class User {
     @Column()
     username!: string;
 
-    @Column()
-    token!: string;
-
     @BeforeInsert()
     onBeforeInsert() {
         this.id = `${this.origin}:${this.username}`;

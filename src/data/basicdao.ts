@@ -1,4 +1,4 @@
-import { DeepPartial, EntityManager, EntityTarget, FindConditions, getConnection, Repository } from "typeorm";
+import { DeepPartial, EntityManager, EntityTarget, FindConditions, FindOneOptions, getConnection, Repository } from "typeorm";
 import { BasicDAO as InterfaceDAO } from "./database";
 
 export class BasicDAO<T> implements InterfaceDAO<T> {
@@ -23,10 +23,15 @@ export class BasicDAO<T> implements InterfaceDAO<T> {
     }
 
     async exists(id: string): Promise<boolean> {
-        return await this.get(id) !== null;
+        return !!await this.get(id);
     }
 
-    async create(entity: T): Promise<T> {
+    async create(entity: T): Promise<string> {
+        await this.repo.insert(entity);
+        return this.repo.getId(entity);
+    }
+
+    async save(entity: T): Promise<T> {
         return this.repo.save(entity);
     }
 
@@ -34,8 +39,8 @@ export class BasicDAO<T> implements InterfaceDAO<T> {
         return this.repo.find();
     }
 
-    async get(id: string): Promise<T | undefined> {
-        return this.repo.findOne(id);
+    async get(id: string, options?: FindOneOptions<T>): Promise<T | undefined> {
+        return this.repo.findOne(id, options);
     }
 
     async update(id: string, entity: DeepPartial<T>): Promise<T | undefined> {
